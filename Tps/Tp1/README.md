@@ -30,16 +30,7 @@ Ce TP consiste à développer une application Java (JAR) avec Spring Boot et RES
 9. Utilisation de fichiers de configuration externes
 
 ## 📁 Structure du projet
-rest/
-├── src/main/java/ma/cigma/rest/
-│ ├── RestApplication.java
-│ ├── controller/
-│ ├── model/
-│ └── service/
-├── src/main/resources/
-│ └── application.properties
-├── pom.xml
-└── target/rest-0.0.1-SNAPSHOT.jar
+
 
 
 ## 🧪 Tests
