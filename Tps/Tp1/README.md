@@ -31,6 +31,8 @@ Ce TP consiste à développer une application Java (JAR) avec Spring Boot et RES
 
 ## 📁 Structure du projet
 
+<img width="2284" height="1444" alt="image" src="https://github.com/user-attachments/assets/e63db97b-275e-44f8-9649-35937c0f1f67" />
+
 
 
 ## 🧪 Tests
