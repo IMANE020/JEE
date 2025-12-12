@@ -42,3 +42,28 @@ Ce TP consiste à développer une application Web (WebApp) qui communique avec u
 ## Structure des projets
 
 ### Microservice (api_sb)
+
+
+
+### WebApp (webapp)
+
+
+
+## Tests
+### Microservice (port 9000) :
+- GET : `http://localhost:9000/employees` (liste tous les employés)
+- Console H2 : `http://localhost:9000/h2-console`
+
+### WebApp (port 9001) :
+- Accueil : `http://localhost:9001/`
+- Formulaire de création/modification d'employés
+- Suppression via liens
+
+## Configuration
+
+### Microservice (`application.properties`) :
+```properties
+spring.application.name=api_sb
+server.port=9000
+spring.h2.console.enabled=true
+
