@@ -42,11 +42,9 @@ Ce TP consiste à développer une application Web (WebApp) qui communique avec u
 ## Structure des projets
 
 ### Microservice (api_sb)
-
-
-
 ### WebApp (webapp)
 
+<img width="896" height="2976" alt="image" src="https://github.com/user-attachments/assets/2e318b1a-bbc1-42ad-b1dc-55434363946e" />
 
 
 ## Tests
