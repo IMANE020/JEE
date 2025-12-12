@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <title>Formulaire Employé - Application Web</title>
+
+    <style>
+        body {
+            padding-top: 50px;
+        }
+        .special {
+            padding-top: 50px;
+        }
+    </style>
+</head>
+<body>
+<!-- Navigation -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">Système de gestion des employés</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Contenu principal -->
+<div class="container special">
+    <h2 class="h2" th:if="${employee.id == null}">Création d'un nouvel employé</h2>
+    <h2 class="h2" th:if="${employee.id != null}">Modification de l'employé</h2>
+
+    <div>
+        <form method="post" th:action="@{/saveEmployee}" th:object="${employee}">
+            <!-- Champ caché pour l'ID -->
+            <input type="hidden" th:field="*{id}">
+
+            <div class="form-group">
+                <label for="firstNameInput">Prénom</label>
+                <input type="text" th:field="*{firstName}" class="form-control"
+                       id="firstNameInput" placeholder="Saisir le prénom" required>
+            </div>
+
+            <div class="form-group">
+                <label for="lastNameInput">Nom</label>
+                <input type="text" th:field="*{lastName}" class="form-control"
+                       id="lastNameInput" placeholder="Saisir le nom" required>
+            </div>
+
+            <div class="form-group">
+                <label for="mailInput">Email</label>
+                <input type="email" th:field="*{mail}" class="form-control"
+                       id="mailInput" placeholder="Saisir l'adresse email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="passwordInput">Mot de passe</label>
+                <input type="password" th:field="*{password}" class="form-control"
+                       id="passwordInput" placeholder="Saisir le mot de passe" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                <span th:if="${employee.id == null}">Créer l'employé</span>
+                <span th:if="${employee.id != null}">Modifier l'employé</span>
+            </button>
+
+            <a th:href="@{/}" class="btn btn-secondary">Annuler</a>
+        </form>
+    </div>
+</div>
+
+<!-- JavaScript -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+</html>
