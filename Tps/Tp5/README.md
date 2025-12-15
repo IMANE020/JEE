@@ -99,10 +99,3 @@ La Gateway interroge Eureka pour localiser automatiquement l’instance du micro
 
 Ces travaux pratiques montrent l’importance de l’API Gateway dans une architecture microservices.  
 **Zuul** permet de comprendre les concepts de base, tandis que **Spring Cloud Gateway** représente la solution moderne, performante et évolutive recommandée par Spring.
-
----
-
-## Références
-
-- TP 5.1 – Spring Cloud Zuul API Gateway  
-- TP 5.2 – Spring Cloud Gateway
