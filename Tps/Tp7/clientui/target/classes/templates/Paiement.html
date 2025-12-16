@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Paiement de la commande</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css"/>
+    <style>
+        .payment-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .payment-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px 15px 0 0;
+            color: white;
+        }
+        .info-box {
+            background-color: #f8f9fa;
+            border-left: 4px solid #007bff;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        .btn-payment {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            border-radius: 25px;
+        }
+        .btn-payment:hover {
+            background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+<!-- Navigation -->
+<nav class="navbar navbar-dark bg-dark mb-4">
+    <div class="container">
+        <a class="navbar-brand" href="/">Mcommerce</a>
+        <span class="navbar-text text-white">
+                <i class="fas fa-lock"></i> Paiement sécurisé
+            </span>
+    </div>
+</nav>
+
+<!-- Contenu principal -->
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card payment-card">
+                <!-- En-tête -->
+                <div class="card-header payment-header text-center">
+                    <h3 class="mb-0">
+                        <i class="fas fa-credit-card"></i> Paiement de la commande
+                    </h3>
+                </div>
+
+                <!-- Corps -->
+                <div class="card-body">
+                    <!-- Récapitulatif -->
+                    <div class="summary mb-4">
+                        <h5 class="text-primary">
+                            <i class="fas fa-receipt"></i> Récapitulatif de la commande
+                        </h5>
+                        <div class="info-box">
+                            <p><strong>ID Commande :</strong> <span class="badge bg-primary" th:text="${commande.id}"></span></p>
+                            <p><strong>Date :</strong> <span th:text="${#dates.format(commande.dateCommande, 'dd/MM/yyyy HH:mm')}"></span></p>
+                            <p><strong>Quantité :</strong> <span th:text="${commande.quantite}"></span> article(s)</p>
+                            <h4 class="mt-3">
+                                <strong>Total à payer :</strong>
+                                <span class="text-success" th:text="${montant} + ' €'"></span>
+                            </h4>
+                        </div>
+                    </div>
+
+                    <!-- Note importante -->
+                    <div class="alert alert-info" role="alert">
+                        <h6><i class="fas fa-info-circle"></i> Note importante :</h6>
+                        <p class="mb-0">
+                            Dans cette version simplifiée de l'application, nous générons automatiquement
+                            un numéro de carte bancaire fictif pour simuler le processus de paiement.
+                            Dans une application réelle, vous devriez entrer vos propres informations de paiement.
+                        </p>
+                    </div>
+
+                    <!-- Informations de sécurité -->
+                    <div class="security-info mb-4">
+                        <h6 class="text-success">
+                            <i class="fas fa-shield-alt"></i> Paiement 100% sécurisé
+                        </h6>
+                        <p class="small text-muted">
+                            <i class="fas fa-lock"></i> Votre paiement est crypté et sécurisé.
+                            <i class="fas fa-check-circle ml-2"></i> Aucune information bancaire n'est stockée.
+                        </p>
+                    </div>
+
+                    <!-- Boutons d'action -->
+                    <div class="text-center mt-5">
+                        <div class="d-grid gap-2 col-md-8 mx-auto">
+                            <a th:href="@{/payer-commande/{id}/{montant}(id=${commande.id}, montant=${montant})}"
+                               class="btn btn-payment btn-lg">
+                                <i class="fas fa-lock"></i> Payer ma commande
+                            </a>
+
+                            <div class="mt-3">
+                                <a href="/" class="btn btn-outline-secondary">
+                                    <i class="fas fa-times"></i> Annuler et retourner à l'accueil
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Garanties -->
+            <div class="row mt-4 text-center">
+                <div class="col-md-4">
+                    <div class="p-3">
+                        <i class="fas fa-shipping-fast fa-2x text-primary"></i>
+                        <h6 class="mt-2">Livraison rapide</h6>
+                        <p class="small text-muted">Sous 48h ouvrées</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-3">
+                        <i class="fas fa-undo fa-2x text-success"></i>
+                        <h6 class="mt-2">Retour facile</h6>
+                        <p class="small text-muted">30 jours pour changer d'avis</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-3">
+                        <i class="fas fa-headset fa-2x text-info"></i>
+                        <h6 class="mt-2">Support 7j/7</h6>
+                        <p class="small text-muted">Assistance par téléphone</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-dark text-white mt-5 py-3">
+    <div class="container text-center">
+        <p class="mb-0 small">
+            <i class="fas fa-lock"></i> Transaction sécurisée SSL |
+            <i class="fas fa-certificate"></i> Certifié PCI DSS
+        </p>
+    </div>
+</footer>
+
+<!-- Scripts -->
+<script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
+<script src="/webjars/bootstrap/4.0.0-2/js/bootstrap.min.js"></script>
+</body>
+</html>

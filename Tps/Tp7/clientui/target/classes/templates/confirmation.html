@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirmation de paiement</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css"/>
+    <style>
+        .confirmation-card {
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .success-header {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            color: white;
+            padding: 40px 0;
+        }
+        .error-header {
+            background: linear-gradient(135deg, #ff0844 0%, #ffb199 100%);
+            color: white;
+            padding: 40px 0;
+        }
+        .confirmation-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+        }
+        .next-steps {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        .step-icon {
+            font-size: 1.5rem;
+            color: #007bff;
+            margin-right: 10px;
+        }
+        .btn-home {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            padding: 12px 40px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+        }
+        .btn-home:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+<!-- Navigation -->
+<nav class="navbar navbar-dark bg-dark mb-4">
+    <div class="container">
+        <a class="navbar-brand" href="/">Mcommerce</a>
+        <span class="navbar-text text-white">
+                Confirmation de commande
+            </span>
+    </div>
+</nav>
+
+<!-- Contenu principal -->
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card confirmation-card">
+                <!-- En-tête succès -->
+                <div th:if="${paiementOk}" class="success-header text-center">
+                    <div class="confirmation-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h1 class="display-4">Paiement Réussi !</h1>
+                    <p class="lead">Votre commande a été validée avec succès</p>
+                </div>
+
+                <!-- En-tête erreur -->
+                <div th:unless="${paiementOk}" class="error-header text-center">
+                    <div class="confirmation-icon">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                    <h1 class="display-4">Paiement Échoué</h1>
+                    <p class="lead">Une erreur est survenue lors du traitement</p>
+                </div>
+
+                <!-- Corps -->
+                <div class="card-body p-5">
+                    <!-- Message de confirmation -->
+                    <div class="text-center mb-5">
+                        <div th:if="${paiementOk}">
+                            <h3 class="text-success mb-4">
+                                <i class="fas fa-check text-success"></i> Félicitations !
+                            </h3>
+                            <p class="lead">
+                                Votre paiement a été accepté. Votre commande est maintenant en cours de traitement.
+                            </p>
+                            <p class="text-muted">
+                                Un email de confirmation vous a été envoyé avec les détails de votre commande.
+                            </p>
+                        </div>
+
+                        <div th:unless="${paiementOk}">
+                            <h3 class="text-danger mb-4">
+                                <i class="fas fa-exclamation-triangle text-danger"></i> Oups !
+                            </h3>
+                            <p class="lead">
+                                Votre paiement n'a pas pu être traité. Veuillez vérifier vos informations.
+                            </p>
+                            <p class="text-muted">
+                                Aucun prélèvement n'a été effectué sur votre compte.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Prochaines étapes (succès seulement) -->
+                    <div th:if="${paiementOk}" class="next-steps">
+                        <h5 class="mb-4">
+                            <i class="fas fa-road text-primary"></i> Prochaines étapes
+                        </h5>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <span class="step-icon">1</span>
+                                    <div>
+                                        <h6>Confirmation par email</h6>
+                                        <p class="small text-muted mb-0">
+                                            Recevez les détails de votre commande
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <span class="step-icon">2</span>
+                                    <div>
+                                        <h6>Préparation de la commande</h6>
+                                        <p class="small text-muted mb-0">
+                                            Traitement sous 24h ouvrées
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <span class="step-icon">3</span>
+                                    <div>
+                                        <h6>Expédition</h6>
+                                        <p class="small text-muted mb-0">
+                                            Livraison sous 48h
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <span class="step-icon">4</span>
+                                    <div>
+                                        <h6>Suivi en ligne</h6>
+                                        <p class="small text-muted mb-0">
+                                            Suivez votre colis en temps réel
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bouton de retour -->
+                    <div class="text-center mt-5">
+                        <a href="/" class="btn btn-home">
+                            <i class="fas fa-home"></i> Retour à l'accueil
+                        </a>
+
+                        <div th:if="${paiementOk}" class="mt-3">
+                            <a href="#" class="btn btn-outline-primary">
+                                <i class="fas fa-download"></i> Télécharger la facture
+                            </a>
+                            <a href="#" class="btn btn-outline-success ml-2">
+                                <i class="fas fa-truck"></i> Suivre ma commande
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Assistance -->
+            <div class="text-center mt-4">
+                <p class="text-muted">
+                    <i class="fas fa-question-circle"></i> Besoin d'aide ?
+                    <a href="#" class="text-primary">Contactez notre service client</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-light mt-5 py-4">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-4">
+                <h6><i class="fas fa-shield-alt"></i> Garantie satisfait ou remboursé</h6>
+                <p class="small text-muted">30 jours pour changer d'avis</p>
+            </div>
+            <div class="col-md-4">
+                <h6><i class="fas fa-headset"></i> Service client</h6>
+                <p class="small text-muted">01 23 45 67 89</p>
+            </div>
+            <div class="col-md-4">
+                <h6><i class="fas fa-lock"></i> Paiement sécurisé</h6>
+                <p class="small text-muted">Cryptage SSL 256 bits</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Scripts -->
+<script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
+<script src="/webjars/bootstrap/4.0.0-2/js/bootstrap.min.js"></script>
+<script>
+    // Animation de confirmation
+    $(document).ready(function() {
+        if (window.location.href.includes("confirmation")) {
+            console.log("Page de confirmation chargée");
+        }
+    });
+</script>
+</body>
+</html>

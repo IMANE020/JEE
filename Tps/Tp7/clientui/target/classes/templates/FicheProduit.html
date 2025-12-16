@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${produit.titre}"></title>
+    <link rel="stylesheet" href="/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css"/>
+    <style>
+        .product-detail-image {
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .product-info {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .action-buttons {
+            margin-top: 30px;
+        }
+        .back-button {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+<!-- Navigation -->
+<nav class="navbar navbar-dark bg-dark mb-4">
+    <div class="container">
+        <a class="navbar-brand" href="/">Mcommerce</a>
+        <div>
+            <a href="/" class="btn btn-outline-light">
+                <i class="fas fa-arrow-left"></i> Retour à l'accueil
+            </a>
+        </div>
+    </div>
+</nav>
+
+<!-- Détails du produit -->
+<div class="container">
+    <div class="row">
+        <!-- Image -->
+        <div class="col-md-6 mb-4">
+            <div class="text-center">
+                <img th:src="@{${produit.image}}"
+                     class="img-fluid product-detail-image"
+                     alt="Image produit"
+                     onerror="this.src='/images/default.jpg'">
+            </div>
+        </div>
+
+        <!-- Informations -->
+        <div class="col-md-6">
+            <div class="product-info">
+                <h1 class="display-5" th:text="${produit.titre}"></h1>
+
+                <div class="mt-4 mb-4">
+                    <h3 class="text-success">
+                        <strong th:text="${produit.prix} + ' €'"></strong>
+                    </h3>
+                    <span class="badge bg-primary">En stock</span>
+                    <span class="badge bg-info ml-2">Livraison gratuite</span>
+                </div>
+
+                <div class="description mb-4">
+                    <h5>Description</h5>
+                    <p class="lead" th:text="${produit.description}"></p>
+                </div>
+
+                <div class="features mb-4">
+                    <h5>Caractéristiques</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-check text-success"></i> Produit authentique</li>
+                        <li><i class="fas fa-check text-success"></i> Certificat d'authenticité</li>
+                        <li><i class="fas fa-check text-success"></i> Livraison sous 48h</li>
+                        <li><i class="fas fa-check text-success"></i> Retour sous 30 jours</li>
+                    </ul>
+                </div>
+
+                <!-- Boutons d'action -->
+                <div class="action-buttons">
+                    <div class="d-grid gap-2">
+                        <a th:href="@{/commander-produit/{id}/{prix}(id=${produit.id}, prix=${produit.prix})}"
+                           class="btn btn-primary btn-lg">
+                            <i class="fas fa-shopping-cart"></i> Commander ce produit
+                        </a>
+                        <a href="/" class="btn btn-outline-secondary btn-lg">
+                            <i class="fas fa-store"></i> Continuer mes achats
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-light mt-5 py-3">
+    <div class="container text-center">
+        <p class="text-muted mb-0">© 2024 Mcommerce - Page produit</p>
+    </div>
+</footer>
+
+<!-- Scripts -->
+<script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
+<script src="/webjars/bootstrap/4.0.0-2/js/bootstrap.min.js"></script>
+<script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
+</body>
+</html>
