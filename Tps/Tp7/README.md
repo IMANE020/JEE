@@ -39,7 +39,6 @@ Le microservice ClientUI communique avec les autres microservices via **OpenFeig
 ## 🛠️ Prérequis
 - Java JDK 17
 - Maven
-- Connexion Internet
 - IDE (IntelliJ IDEA / Eclipse / VS Code)
 - Navigateur Web
 
