@@ -1,4 +1,3 @@
-```markdown
 # 📦 Microservices – Études de cas 1 & 2
 
 ## 👥 Équipe de développement
