@@ -1,0 +1,17 @@
+{
+  "groups": [
+    {
+      "name": "mes-config-ms",
+      "type": "com.example.microservice_commandes.configuration.ApplicationPropertiesConfiguration",
+      "sourceType": "com.example.microservice_commandes.configuration.ApplicationPropertiesConfiguration"
+    }
+  ],
+  "properties": [
+    {
+      "name": "mes-config-ms.commandes-last",
+      "type": "java.lang.Integer",
+      "sourceType": "com.example.microservice_commandes.configuration.ApplicationPropertiesConfiguration"
+    }
+  ],
+  "hints": []
+}
