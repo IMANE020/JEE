@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Microservices Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3a0ca3;
+            --accent-color: #4cc9f0;
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+            --info-color: #3498db;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .dashboard-wrapper {
+            background: rgba(255, 255, 255, 0.95);
+            min-height: 100vh;
+            border-radius: 0;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.8rem;
+            color: white !important;
+            letter-spacing: 1px;
+        }
+
+        .navbar-brand i {
+            color: var(--accent-color);
+            margin-right: 10px;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.9) !important;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem !important;
+            margin: 0 5px;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: white !important;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-link.active {
+            background: rgba(255, 255, 255, 0.2);
+            color: white !important;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border-radius: 20px;
+            padding: 4rem 2rem;
+            margin: 2rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(76, 201, 240, 0.1) 0%, rgba(67, 97, 238, 0.05) 70%);
+            z-index: -1;
+        }
+
+        .display-4 {
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .lead {
+            font-size: 1.3rem;
+            color: #666;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+
+        /* Cards */
+        .service-card {
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s ease;
+            overflow: hidden;
+            margin-bottom: 2rem;
+            background: white;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            padding: 1.5rem;
+            color: white;
+        }
+
+        .card-header h5 {
+            margin: 0;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-header h5 i {
+            font-size: 1.3rem;
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+
+        .feature-list i {
+            color: var(--primary-color);
+            font-size: 0.9rem;
+        }
+
+        /* Buttons */
+        .btn {
+            border-radius: 50px;
+            padding: 12px 30px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .btn-lg {
+            padding: 15px 40px;
+            font-size: 1.1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(67, 97, 238, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success-color), #27ae60);
+            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(46, 204, 113, 0.4);
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, var(--info-color), #2980b9);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, var(--warning-color), #e67e22);
+            box-shadow: 0 5px 15px rgba(243, 156, 18, 0.3);
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 249, 250, 0.9) 100%);
+            border-radius: 20px;
+            padding: 3rem;
+            margin: 3rem 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1.5rem;
+        }
+
+        .stat-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--secondary-color);
+            margin: 0.5rem 0;
+        }
+
+        .stat-label {
+            color: #666;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, var(--dark-color), #2c3e50);
+            color: white;
+            padding: 3rem 0;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+        }
+
+        .tech-stack {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 2rem 0;
+        }
+
+        .tech-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 2rem 1rem;
+            }
+
+            .display-4 {
+                font-size: 2.5rem;
+            }
+
+            .lead {
+                font-size: 1.1rem;
+            }
+
+            .stats-section {
+                padding: 2rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="dashboard-wrapper">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-microchip"></i>MicroServices Dashboard
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav ms-auto">
+                    <a class="nav-link active" href="/">
+                        <i class="fas fa-home"></i> Accueil
+                    </a>
+                    <a class="nav-link" href="/produits">
+                        <i class="fas fa-box"></i> Produits
+                    </a>
+                    <a class="nav-link" href="/commandes">
+                        <i class="fas fa-shopping-cart"></i> Commandes
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="container">
+        <div class="hero-section animate-on-scroll">
+            <h1 class="display-4 fw-bold">Microservices Architecture Dashboard</h1>
+            <p class="lead">Plateforme de gestion complète pour vos produits et commandes avec architecture microservices.</p>
+            <div class="mt-5">
+                <a class="btn btn-primary btn-lg float-animation" href="/produits">
+                    <i class="fas fa-rocket me-2"></i>Explorer les Produits
+                </a>
+                <a class="btn btn-success btn-lg ms-3 float-animation" href="/commandes" style="animation-delay: 0.2s">
+                    <i class="fas fa-chart-line me-2"></i>Gérer les Commandes
+                </a>
+            </div>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="stats-section animate-on-scroll">
+            <div class="row text-center">
+                <div class="col-md-3 col-6 stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <div class="stat-number" th:text="${totalProduits != null ? totalProduits : 0}">0</div>
+                    <div class="stat-label">Produits Totaux</div>
+                </div>
+                <div class="col-md-3 col-6 stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <div class="stat-number" th:text="${totalCommandes != null ? totalCommandes : 0}">0</div>
+                    <div class="stat-label">Commandes Actives</div>
+                </div>
+                <div class="col-md-3 col-6 stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <div class="stat-number">
+                        <span th:if="${chiffreAffaires != null}" th:text="${#numbers.formatDecimal(chiffreAffaires, 1, 2)}">0.00</span>
+                        <span th:unless="${chiffreAffaires != null}">0.00</span>€
+                    </div>
+                    <div class="stat-label">Chiffre d'Affaires</div>
+                </div>
+                <div class="col-md-3 col-6 stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <div class="stat-number" th:text="${servicesActifs != null ? servicesActifs : 4}">4</div>
+                    <div class="stat-label">Services Actifs</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Services Section -->
+        <div class="row mt-5">
+            <div class="col-lg-6 animate-on-scroll">
+                <div class="service-card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-box-open"></i> Gestion des Produits</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text mb-4">Gérez votre catalogue de produits avec une interface intuitive et des fonctionnalités avancées.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check-circle"></i> <strong>CRUD Complet</strong> - Création, lecture, modification, suppression</li>
+                            <li><i class="fas fa-check-circle"></i> <strong>Gestion des Stocks</strong> - Suivi en temps réel</li>
+                            <li><i class="fas fa-check-circle"></i> <strong>Catégories</strong> - Organisation par catégories</li>
+                            <li><i class="fas fa-check-circle"></i> <strong>Recherche Avancée</strong> - Filtres multiples</li>
+                            <li><i class="fas fa-check-circle"></i> <strong>Statistiques</strong> - Analytics et rapports</li>
+                        </ul>
+                        <div class="mt-4">
+                            <a href="/produits" class="btn btn-info w-100">
+                                <i class="fas fa-arrow-right me-2"></i>Accéder au Module Produits
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 animate-on-scroll" style="animation-delay: 0.2s">
+                <div class="service-card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-shipping-fast"></i> Gestion des Commandes</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text mb-4">Suivez et gérez toutes les commandes de vos clients avec un système de tracking complet.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check-circle"></i> <strong>Workflow Complet</strong> - De la commande à la livraison</li>
+                            <li><i class="fas fa-check-circle"></i> <strong>Notifications</strong> - Alertes en temps réel</li>
+                            <li><i class="fas fa-check-circle"></i> <strong>Facturation</strong> - Génération automatique</li>
+                            <li><i class="fas fa-check-circle"></i> <strong>Historique</strong> - Archivage des transactions</li>
+                            <li><i class="fas fa-check-circle"></i> <strong>API Intégrée</strong> - Connectivité avec autres systèmes</li>
+                        </ul>
+                        <div class="mt-4">
+                            <a href="/commandes" class="btn btn-warning w-100">
+                                <i class="fas fa-arrow-right me-2"></i>Accéder au Module Commandes
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tech Stack -->
+        <div class="row mt-5 animate-on-scroll" style="animation-delay: 0.4s">
+            <div class="col-12">
+                <div class="service-card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-cogs"></i> Architecture Technologique</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row text-center">
+                            <div class="col-md-2 col-4 mb-3">
+                                <div class="tech-icon">
+                                    <i class="fab fa-java fa-3x text-danger"></i>
+                                    <p class="mt-2">Spring Boot</p>
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-4 mb-3">
+                                <div class="tech-icon">
+                                    <i class="fas fa-cloud fa-3x text-info"></i>
+                                    <p class="mt-2">Spring Cloud</p>
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-4 mb-3">
+                                <div class="tech-icon">
+                                    <i class="fas fa-server fa-3x text-success"></i>
+                                    <p class="mt-2">Microservices</p>
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-4 mb-3">
+                                <div class="tech-icon">
+                                    <i class="fas fa-database fa-3x text-warning"></i>
+                                    <p class="mt-2">H2 Database</p>
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-4 mb-3">
+                                <div class="tech-icon">
+                                    <i class="fab fa-github fa-3x text-dark"></i>
+                                    <p class="mt-2">GitHub</p>
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-4 mb-3">
+                                <div class="tech-icon">
+                                    <i class="fas fa-code fa-3x text-primary"></i>
+                                    <p class="mt-2">Thymeleaf</p>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-center mt-4">Cette application utilise une architecture microservices moderne avec Spring Boot, Spring Cloud, et des technologies de pointe pour une scalabilité maximale.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <i class="fas fa-microchip me-2"></i>MicroServices Pro
+                </div>
+                <p class="mb-4">Plateforme de gestion d'entreprise basée sur l'architecture microservices</p>
+
+                <div class="tech-stack">
+                    <span class="tech-item">Spring Boot</span>
+                    <span class="tech-item">Spring Cloud</span>
+                    <span class="tech-item">Docker</span>
+                    <span class="tech-item">Kubernetes</span>
+                    <span class="tech-item">REST API</span>
+                </div>
+
+                <p class="mt-4 text-muted">
+                    © 2025 Projet JEE - Développement Microservices avec Spring Cloud
+                </p>
+                <p class="text-muted small">
+                    <i class="fas fa-user-graduate me-2"></i>
+                    Étudiant en Ingénierie des Systèmes d'Information
+                </p>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Animation on scroll
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.animate-on-scroll').forEach(el => {
+        observer.observe(el);
+    });
+
+    // Auto-update stats
+    function updateStats() {
+        // Simuler des mises à jour de statistiques
+        const statNumbers = document.querySelectorAll('.stat-number');
+        statNumbers.forEach(stat => {
+            const current = parseInt(stat.textContent);
+            if (!isNaN(current) && current < 1000) {
+                stat.textContent = current + Math.floor(Math.random() * 5);
+            }
+        });
+    }
+
+    // Mettre à jour toutes les 10 secondes
+    setInterval(updateStats, 10000);
+
+    // Floating animation for hero buttons
+    const floatButtons = document.querySelectorAll('.float-animation');
+    floatButtons.forEach((btn, index) => {
+        btn.style.animationDelay = `${index * 0.2}s`;
+    });
+
+    // Add hover effect to service cards
+    const serviceCards = document.querySelectorAll('.service-card');
+    serviceCards.forEach(card => {
+        card.addEventListener('mouseenter', () => {
+            card.style.transform = 'translateY(-10px)';
+        });
+
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'translateY(0)';
+        });
+    });
+</script>
+</body>
+</html>

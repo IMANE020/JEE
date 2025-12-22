@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Détails de la Commande</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3a0ca3;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+
+        .detail-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .info-value {
+            color: #212529;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color))">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <i class="fas fa-shipping-fast me-2"></i>MicroServices Store
+        </a>
+        <div class="navbar-nav ms-auto">
+            <a class="nav-link" href="/produits">Produits</a>
+            <a class="nav-link active" href="/commandes">Commandes</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container py-5">
+    <!-- Bouton retour -->
+    <a href="/commandes" class="btn btn-outline-secondary mb-4">
+        <i class="fas fa-arrow-left me-2"></i>Retour à la liste
+    </a>
+
+    <!-- Carte de détails -->
+    <div class="card detail-card">
+        <div class="card-header">
+            <h4 class="mb-0">
+                <i class="fas fa-shopping-cart me-2"></i>Commande N° <span th:text="${commande.id}"></span>
+            </h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <!-- Informations de base -->
+                <div class="col-md-6">
+                    <h5 class="mb-3"><i class="fas fa-info-circle me-2"></i>Détails de la commande</h5>
+                    <table class="table table-borderless">
+                        <tr>
+                            <td class="info-label" width="40%">ID Commande :</td>
+                            <td class="info-value">
+                                <span class="badge bg-secondary">#<span th:text="${commande.id}"></span></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="info-label">Date :</td>
+                            <td class="info-value" th:text="${#temporals.format(commande.date, 'EEEE dd MMMM yyyy')}"></td>
+                        </tr>
+                        <tr>
+                            <td class="info-label">Description :</td>
+                            <td class="info-value" th:text="${commande.description}"></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- Informations produit -->
+                <div class="col-md-6">
+                    <h5 class="mb-3"><i class="fas fa-box-open me-2"></i>Produit commandé</h5>
+                    <table class="table table-borderless">
+                        <tr>
+                            <td class="info-label">Produit ID :</td>
+                            <td class="info-value">
+                                <a th:href="@{/produits/{id}(id=${commande.idProduit})}"
+                                   class="badge bg-info text-decoration-none">
+                                    <i class="fas fa-box me-1"></i>
+                                    #<span th:text="${commande.idProduit}"></span>
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Informations financières -->
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <h5 class="mb-3"><i class="fas fa-euro-sign me-2"></i>Informations financières</h5>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card bg-light mb-3">
+                                <div class="card-body text-center">
+                                    <h6 class="card-title text-muted">Quantité</h6>
+                                    <h3 class="card-text text-primary">
+                                        <span th:text="${commande.quantite}"></span> unités
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card bg-light mb-3">
+                                <div class="card-body text-center">
+                                    <h6 class="card-title text-muted">Prix unitaire</h6>
+                                    <h3 class="card-text text-success">
+                                        <span th:text="${#numbers.formatDecimal(commande.montant / commande.quantite, 1, 2)}"></span> €
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card bg-light mb-3">
+                                <div class="card-body text-center">
+                                    <h6 class="card-title text-muted">Montant total</h6>
+                                    <h3 class="card-text text-success">
+                                        <span th:text="${#numbers.formatDecimal(commande.montant, 1, 2)}"></span> €
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Boutons d'action -->
+            <div class="d-flex justify-content-between mt-4 pt-3 border-top">
+                <div>
+                    <a th:href="@{/produits/{id}(id=${commande.idProduit})}"
+                       class="btn btn-info">
+                        <i class="fas fa-eye me-2"></i>Voir le produit
+                    </a>
+                </div>
+                <div>
+                    <a th:href="@{/commandes/edit/{id}(id=${commande.id})}"
+                       class="btn btn-warning me-2">
+                        <i class="fas fa-edit me-2"></i>Modifier
+                    </a>
+                    <a th:href="@{/commandes/delete/{id}(id=${commande.id})}"
+                       class="btn btn-danger"
+                       onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette commande ?')">
+                        <i class="fas fa-trash me-2"></i>Supprimer
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

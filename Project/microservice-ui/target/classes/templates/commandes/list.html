@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Liste des Commandes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3a0ca3;
+            --accent-color: #4cc9f0;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-bottom: none;
+            padding: 1.5rem;
+        }
+
+        .table-hover tbody tr {
+            transition: all 0.2s ease;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: rgba(67, 97, 238, 0.05);
+            transform: scale(1.002);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success-color), #27ae60);
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
+        }
+
+        .badge {
+            border-radius: 20px;
+            padding: 6px 12px;
+            font-weight: 500;
+        }
+
+        .stat-card {
+            color: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-card i {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+
+        .filter-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .page-title {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .action-buttons .btn {
+            padding: 5px 10px;
+            margin: 0 2px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .action-buttons .btn:hover {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <i class="fas fa-shipping-fast me-2"></i>MicroServices Store
+        </a>
+        <div class="navbar-nav ms-auto">
+            <a class="nav-link mx-3 fw-semibold" href="/produits">
+                <i class="fas fa-box me-2"></i>Produits
+            </a>
+            <a class="nav-link mx-3 fw-semibold active" href="/commandes">
+                <i class="fas fa-shopping-cart me-2"></i>Commandes
+            </a>
+            <a class="nav-link mx-3 fw-semibold" href="/">
+                <i class="fas fa-home me-2"></i>Accueil
+            </a>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<div class="container py-5 animate-fade-in">
+    <!-- Header Section -->
+    <div class="row align-items-center mb-5">
+        <div class="col-md-6">
+            <h1 class="page-title display-5">
+                <i class="fas fa-shopping-cart me-3"></i>Gestion des Commandes
+            </h1>
+            <p class="text-muted">Visualisez et gérez toutes les commandes de votre boutique en ligne</p>
+        </div>
+        <div class="col-md-6 text-end">
+            <a th:href="@{/commandes/new}" class="btn btn-success btn-lg shadow">
+                <i class="fas fa-plus-circle me-2"></i>Nouvelle Commande
+            </a>
+        </div>
+    </div>
+
+
+
+    <!-- Empty State -->
+    <div th:if="${commandes == null or commandes.isEmpty()}" class="text-center py-5">
+        <div class="card shadow border-0 py-5">
+            <div class="card-body">
+                <i class="fas fa-shopping-cart fa-5x text-muted mb-4"></i>
+                <h3 class="text-muted mb-3">Aucune commande disponible</h3>
+                <p class="text-muted mb-4">Commencez par créer votre première commande</p>
+                <a th:href="@{/commandes/new}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-plus me-2"></i>Créer une commande
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Commands Table -->
+    <div th:unless="${commandes == null or commandes.isEmpty()}" class="row">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-header">
+                    <h4 class="mb-0"><i class="fas fa-list me-2"></i>Liste des Commandes</h4>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                            <tr>
+                                <th class="ps-4">ID</th>
+                                <th>Date</th>
+                                <th>Description</th>
+                                <th>Produit</th>
+                                <th>Quantité</th>
+                                <th>Montant</th>
+                                <th class="text-end pe-4">Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="commande : ${commandes}" class="animate__animated animate__fadeIn">
+                                <td class="ps-4">
+                                    <span class="badge bg-dark">#<span th:text="${commande.id}"></span></span>
+                                </td>
+                                <td>
+                                    <div class="fw-semibold" th:text="${#temporals.format(commande.date, 'dd/MM/yyyy')}"></div>
+                                    <small class="text-muted" th:text="${#temporals.format(commande.date, 'HH:mm')}"></small>
+                                </td>
+                                <td th:text="${commande.description}"></td>
+                                <td>
+                                    <a th:href="@{/produits/{id}(id=${commande.idProduit})}"
+                                       class="badge bg-info text-decoration-none">
+                                        <i class="fas fa-box me-1"></i>
+                                        #<span th:text="${commande.idProduit}"></span>
+                                    </a>
+                                </td>
+                                <td>
+                                    <span class="badge bg-primary">
+                                        <span th:text="${commande.quantite}"></span> unités
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="fw-bold text-success fs-5">
+                                        <span th:text="${#numbers.formatDecimal(commande.montant, 1, 2)}"></span> €
+                                    </span>
+                                </td>
+                                <td class="text-end pe-4 action-buttons">
+                                    <a th:href="@{/commandes/{id}(id=${commande.id})}"
+                                       class="btn btn-info btn-sm" title="Voir détails">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a th:href="@{/commandes/edit/{id}(id=${commande.id})}"
+                                       class="btn btn-warning btn-sm" title="Modifier">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a th:href="@{/commandes/delete/{id}(id=${commande.id})}"
+                                       class="btn btn-danger btn-sm"
+                                       onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette commande ?')"
+                                       title="Supprimer">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div th:unless="${commandes == null or commandes.isEmpty()}" class="row mt-5">
+        <div class="col-md-4 mb-4">
+            <div class="stat-card" style="background: linear-gradient(135deg, #3498db, #2980b9);">
+                <i class="fas fa-shopping-cart"></i>
+                <h3 th:text="${commandes.size()}"></h3>
+                <p class="mb-0">Total Commandes</p>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="stat-card" style="background: linear-gradient(135deg, #2ecc71, #27ae60);">
+                <i class="fas fa-euro-sign"></i>
+                <h3>
+                    <!-- Version avec vérification pour éviter les erreurs -->
+                    <span th:if="${totalMontant != null}"
+                          th:text="${#numbers.formatDecimal(totalMontant, 1, 2)}"></span>
+                    <span th:unless="${totalMontant != null}">0.00</span> €
+                </h3>
+                <p class="mb-0">Montant Total</p>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="stat-card" style="background: linear-gradient(135deg, #9b59b6, #8e44ad);">
+                <i class="fas fa-boxes"></i>
+                <h3>
+                    <!-- Version avec vérification pour éviter les erreurs -->
+                    <span th:if="${totalQuantite != null}"
+                          th:text="${totalQuantite}"></span>
+                    <span th:unless="${totalQuantite != null}">0</span>
+                </h3>
+                <p class="mb-0">Quantité Totale</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-dark text-white py-4 mt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h5><i class="fas fa-microchip me-2"></i>MicroServices Store</h5>
+                <p class="mb-0 text-muted">Application de gestion de produits et commandes</p>
+            </div>
+            <div class="col-md-6 text-end">
+                <p class="text-muted mb-0">
+                    © 2025 Développement MicroServices avec Spring Cloud
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function filterByDays() {
+        const jours = document.getElementById('joursFilter').value;
+        if (jours && jours > 0) {
+            window.location.href = `/commandes/recent?jours=${jours}`;
+        }
+    }
+
+    // Animation pour les lignes du tableau
+    document.addEventListener('DOMContentLoaded', function() {
+        const tableRows = document.querySelectorAll('tbody tr');
+        tableRows.forEach((row, index) => {
+            row.style.animationDelay = `${index * 0.05}s`;
+        });
+    });
+</script>
+</body>
+</html>
